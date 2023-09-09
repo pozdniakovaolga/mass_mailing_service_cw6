@@ -1,0 +1,89 @@
+{% extends 'mailing/base.html' %}
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">1001 mails</h1>
+    <p class="lead fst-italic">Сервис управления рассылками
+    </p>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card shadow-sm">
+                <br><h3 class="card-title">Контакты</h3>
+                <img src="/media/contact.jpeg" />
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <br><div class="btn-group">
+                            <a href="{% url 'contact:contact_list' %}"
+                               class="btn btn-block btn-outline-primary">Посмотреть все</a>
+                            {% if not user.is_manager %}
+                            <a href="{% url 'contact:contact_create' %}"
+                               class="btn btn-block btn-outline-primary">Добавить нового</a>
+                            {% endif %}
+                        </div>
+                        {% else %}
+                        <br>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card shadow-sm">
+                <br><h3 class="card-title">Сообщение</h3>
+                <img src="/media/message.jpeg" />
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <div class="btn-group">
+                            <a href="{% url 'message:message_list' %}"
+                               class="btn btn-block btn-outline-primary">Посмотреть все</a>
+                            {% if not user.is_manager %}
+                            <a href="{% url 'message:message_create' %}"
+                               class="btn btn-block btn-outline-primary">Добавить новое</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card shadow-sm">
+                <br><h3 class="card-title">Рассылка</h3>
+                <img src="/media/mailing.jpeg" />
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <div class="btn-group">
+                            <a href="{% url 'mailing:mailing_list' %}"
+                               class="btn btn-block btn-outline-primary">Посмотреть все</a>
+                            {% if not user.is_manager %}
+                            <a href="{% url 'mailing:mailing_create' %}"
+                               class="btn btn-block btn-outline-primary">Добавить новую</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card shadow-sm">
+                <br><h3 class="card-title">Статистика</h3>
+                <img src="/media/statistics.jpeg" />
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <div class="btn-group">
+                            {% if not user.is_manager %}
+                            <a href="{% url 'mailing:log_list' %}"
+                               class="btn btn-block btn-outline-primary">Посмотреть <br>отчеты</a>
+                            {% else %}
+                            <a href="{% url 'mailing:log_list' %}"
+                               class="btn btn-block btn-outline-primary">Посмотреть отчеты</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

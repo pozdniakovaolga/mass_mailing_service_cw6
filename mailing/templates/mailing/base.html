@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>1001 mails</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">1001 mails</h5>
+    <nav class="ms-5">
+        <a href="{% url 'mailing:index' %}" class="p-2 btn btn-outline-primary">Главная</a>
+        {% if user.is_manager %}
+        <a href="{% url 'users:user_list' %}" class="p-2 btn btn-outline-primary">Пользователи</a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <a href="{% url 'contact:contact_list' %}" class="p-2 btn btn-outline-primary">Контакты</a>
+        <a href="{% url 'message:message_list' %}" class="p-2 btn btn-outline-primary">Сообщения</a>
+        <a href="{% url 'mailing:mailing_list' %}" class="p-2 btn btn-outline-primary">Рассылки</a>
+        <a href="{% url 'mailing:log_list' %}" class="p-2 btn btn-outline-primary">Статистика</a>
+        <a href="{% url 'users:profile' %}" class="p-2 btn btn-outline-primary">Профиль</a>
+        <a href="{% url 'users:logout' %}" class="p-2 btn btn-outline-primary">Выйти</a>
+        {% else %}
+        <a href="{% url 'users:register' %}" class="p-2 btn btn-outline-primary">Регистрация</a>
+        <a href="{% url 'users:login' %}" class="p-2 btn btn-outline-primary">Войти</a>
+        {% endif %}
+    </nav>
+</div>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-12 col-md">
+                111111, город Москва, Агатова ул, д. 5, офис 1<br>
+                Все права защищены.
+                <small class="d-block mb-3 text-muted">&copy; 2023</small>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

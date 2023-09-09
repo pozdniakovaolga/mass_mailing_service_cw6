@@ -4,7 +4,7 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from contact.models import Contact
 from django.urls import reverse_lazy
 from contact.forms import ContactForm
-from mailing.views import OwnerRequiredMixin, ManagerRequiredMixin
+from mailing.views import OwnerRequiredMixin, ManagerOrOwnerRequiredMixin
 
 
 class ContactCreateView(LoginRequiredMixin, CreateView):
@@ -40,7 +40,7 @@ class ContactListView(ListView):
         return queryset
 
 
-class ContactDetailView(OwnerRequiredMixin, ManagerRequiredMixin, DetailView):
+class ContactDetailView(ManagerOrOwnerRequiredMixin, DetailView):
     """Контроллер просмотра отдельного клиента сервиса"""
     model = Contact
 

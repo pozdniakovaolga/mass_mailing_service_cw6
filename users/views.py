@@ -109,7 +109,7 @@ class UserListView(ListView):
     paginate_by = 9  # количество элементов на одну страницу
     ordering = ['-id']
 
-    def dispatch(self, request, *args, **kwargs):  # доступ к списку только для менеджера
+    def dispatch(self, request, *args, **kwargs):  # отображение списка только для менеджера
         if self.request.user.is_anonymous:
             return redirect('mailing:access_error')
         elif not self.request.user.is_manager:

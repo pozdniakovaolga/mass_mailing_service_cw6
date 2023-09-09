@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from mailing.views import OwnerRequiredMixin, ManagerRequiredMixin
+from mailing.views import OwnerRequiredMixin, ManagerOrOwnerRequiredMixin
 from message.models import Message
 from django.urls import reverse_lazy
 from message.forms import MessageForm
@@ -41,7 +41,7 @@ class MessageListView(ListView):
         return queryset
 
 
-class MessageDetailView(OwnerRequiredMixin, ManagerRequiredMixin, DetailView):
+class MessageDetailView(ManagerOrOwnerRequiredMixin, DetailView):
     """Контроллер просмотра отдельного сообщения для рассылки"""
     model = Message
 

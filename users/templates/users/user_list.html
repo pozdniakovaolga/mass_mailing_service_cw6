@@ -18,6 +18,7 @@
        </tr>
    </thead>
    {% for object in object_list %}
+   {% if not object.is_superuser and not object.is_manager%}
    <tbody>
       <tr>
       <th scope="row">{{ object.pk}}</th>
@@ -29,6 +30,7 @@
       </td>
       </tr>
    </tbody>
+   {% endif %}
    {% endfor %}
    </table>
 

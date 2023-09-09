@@ -22,10 +22,20 @@ class OwnerRequiredMixin(DetailView):
 
 
 class ManagerRequiredMixin(DetailView):
-    """Миксин проверки прав доступа к объекту, доступ только для автора и менеджера"""
+    """Миксин проверки прав доступа к объекту, доступ только для менеджера"""
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_manager:
+            return redirect('mailing:access_error')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ManagerOrOwnerRequiredMixin(DetailView):
+    """Миксин проверки прав доступа к объекту, доступ только для автора и менеджера"""
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if not request.user.is_manager and obj.created_by != request.user:
             return redirect('mailing:access_error')
         return super().dispatch(request, *args, **kwargs)
 
@@ -58,12 +68,12 @@ class MailingListView(ListView):
         return queryset
 
 
-class MailingDetailView(OwnerRequiredMixin, ManagerRequiredMixin, DetailView):
+class MailingDetailView(ManagerOrOwnerRequiredMixin, DetailView):
     """Контроллер просмотра отдельной рассылки"""
     model = Mailing
 
 
-class MailingUpdateView(OwnerRequiredMixin, ManagerRequiredMixin, UpdateView):
+class MailingUpdateView(ManagerOrOwnerRequiredMixin, UpdateView):
     """Контроллер редактирования рассылки"""
     model = Mailing
     form_class = MailingForm
@@ -89,7 +99,6 @@ class LogListView(ListView):
     """Контроллер просмотра логов"""
     model = Log
     paginate_by = 9  # количество элементов на одну страницу
-    ordering = ['-id']
 
     def dispatch(self, request, *args, **kwargs):  # запрет доступа без авторизации
         if self.request.user.is_anonymous:
@@ -100,8 +109,9 @@ class LogListView(ListView):
         context_data = super().get_context_data(**kwargs)
         obj_lst = []
         for log in Log.objects.all():
-            if log.mailing.created_by == self.request.user:
+            if log.mailing.created_by == self.request.user or self.request.user.is_manager:  # менеджеру доступны все логи
                 obj_lst.append(log)
+        obj_lst.reverse()
         context_data['object_list'] = obj_lst
         return context_data
 
@@ -112,7 +122,7 @@ class LogDetailView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):  # доступ к логу только по рассылке, которая создана пользователем
         obj = self.get_object()
-        if obj.mailing.created_by != request.user:
+        if (obj.mailing.created_by != request.user) and (not self.request.user.is_manager):  # менеджеру доступны все логи
             return redirect('mailing:access_error')
         return super().dispatch(request, *args, **kwargs)
 

@@ -17,16 +17,16 @@
                 </div>
                 <div class="card-body">
                     <p>
-                        {{ object.datetime_start }}
+                        Время начала: {{ object.datetime_start }}
                     </p>
                     <p>
-                        {{ object.datetime_finish }}
+                        Время окончания: {{ object.datetime_finish }}
                     </p>
                     <p>
-                        {{ object.get_period_display }}
+                        Периодичность: {{ object.get_period_display }}
                     </p>
                     <p>
-                        {{ object.get_status_display }}
+                        Статус: {{ object.get_status_display }}
                     </p>
                      <div class="btn-group">
                          <a href="{% url 'mailing:mailing_edit' object.pk %}"

@@ -4,11 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
-from blog.models import Article
 from contact.models import Contact
 from mailing.models import Mailing, Log
 from django.urls import reverse_lazy
 from mailing.forms import MailingForm, MailingManagerForm
+from mailing.services import get_cashed_article_list
 
 
 class IndexView(TemplateView):
@@ -17,7 +17,8 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        article_list = list(Article.objects.all())
+
+        article_list = list(get_cashed_article_list())
         article_random_list = random.sample(article_list, 3)
         context_data['article_list'] = article_random_list  # три рандомные статьи
         context_data['mailing_count'] = Mailing.objects.all().count()  # количество рассылок всего

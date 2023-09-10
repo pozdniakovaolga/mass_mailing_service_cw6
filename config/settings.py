@@ -154,13 +154,26 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_RECEPIENT_LIST = [os.getenv('EMAIL_RECEPIENT_LIST')]
 
 
+# Cron
 CRONJOBS = [
     ('*/5 * * * *', 'mailing.services.send_mails')
 ]
 
+# User
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 LOGIN_URL = '/users/'
+
+# Cache
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == '1'
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('REDIS'),
+        }
+    }

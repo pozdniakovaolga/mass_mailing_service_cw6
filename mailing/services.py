@@ -1,6 +1,9 @@
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.cache import cache
 import datetime
+
+from blog.models import Article
 from mailing.models import Mailing, Log
 
 
@@ -55,3 +58,19 @@ def send_mails():
                     if mailing.period == 'ONCE':  # единоразовая
                         mailing.status = 'FINISHED'  # изменение статуса рассылки на "завершена"
                         mailing.save()
+
+
+def get_cashed_article_list():
+    """Функция возвращает закешированный список статей"""
+
+    key = 'articles'
+    article_list = Article.objects.all()
+
+    if settings.CACHE_ENABLED:
+        articles = cache.get(key)
+        if articles is None:
+            articles = article_list
+            cache.set(key, articles)
+        return articles
+
+    return article_list

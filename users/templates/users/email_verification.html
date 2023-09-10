@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+        <a href="http://{{ domain }}{% url 'users:activate' uidb64=uid token=token %}">
+            Пожалуйста, активируйте свой аккаунт
+        </a>
+</div>
+</body>
+</html>

@@ -19,8 +19,10 @@ class IndexView(TemplateView):
         context_data = super().get_context_data(**kwargs)
 
         article_list = list(get_cashed_article_list())
-        article_random_list = random.sample(article_list, 3)
-        context_data['article_list'] = article_random_list  # три рандомные статьи
+        if len(article_list) >= 3:
+            article_random_list = random.sample(article_list, 3)
+            context_data['article_list'] = article_random_list  # три рандомные статьи
+
         context_data['mailing_count'] = Mailing.objects.all().count()  # количество рассылок всего
         context_data['mailing_started_count'] = Mailing.objects.filter(status='STARTED').count()  # активных рассылок
         context_data['mailing_contacts_count'] = Contact.objects.all().count()  # уникальных клиентов
@@ -62,6 +64,11 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
+
+    def get_form(self, form_class=None):  # отображение только тех контактов, которые созданы пользователем
+        form = super().get_form(form_class=None)
+        form.fields['contacts'].queryset = form.fields['contacts'].queryset.filter(created_by=self.request.user.id)
+        return form
 
     def form_valid(self, form):  # автоматическое присвоение автора рассылки
         if form.is_valid():

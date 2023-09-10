@@ -23,12 +23,12 @@ class RegisterView(CreateView):
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:register_need_verify')
 
-    def form_valid(self, form):  # Отправка ссылки для верификации email на почту
+    def form_valid(self, form):  # отправка ссылки для верификации email на почту
         if form.is_valid():
             user = form.save()
-            user.is_active = False  # Деактивация аккаунта до процедуры верификации по почте
+            user.is_active = False  # деактивация аккаунта до процедуры верификации по почте
             user.save()
-            current_site = get_current_site(self.request)  # Получение адреса сайта для формирования ссылки
+            current_site = get_current_site(self.request)  # получение адреса сайта для формирования ссылки
             subject = "Активация аккаунта"
             body = render_to_string(
                 'users/email_verification.html',

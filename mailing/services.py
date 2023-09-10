@@ -8,6 +8,7 @@ from mailing.models import Mailing, Log
 
 
 def send_email(mailing, contacts):
+    """Функция отправки сообщения выбранному контакту"""
     contact_list = [contacts.email]
     server_response = ""
     try:
@@ -18,16 +19,17 @@ def send_email(mailing, contacts):
             recipient_list=contact_list,
             fail_silently=False
         )
-    except Exception as expt:
+    except Exception as expt:  # обработка и сохранение сообщения об ошибке
         server_response = expt
         try_status = 'Failed'
     else:
         try_status = 'Ok'
-
+    #  добавление записи в лог
     Log.objects.create(mailing=mailing, contacts=contacts, try_status=try_status, server_answer=server_response)
 
 
 def send_mails():
+    """Функция запуска рассылки"""
     now = datetime.datetime.now()
 
     for mailing in Mailing.objects.filter(status='STARTED'):  # для рассылки среди всех запущенных рассылок

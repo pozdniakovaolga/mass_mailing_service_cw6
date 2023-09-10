@@ -63,7 +63,7 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
     success_url = reverse_lazy('mailing:mailing_list')
 
-    def form_valid(self, form):  # автоматическое формирование автора рассылки
+    def form_valid(self, form):  # автоматическое присвоение автора рассылки
         if form.is_valid():
             product = form.save()
             product.created_by = self.request.user

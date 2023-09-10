@@ -13,7 +13,7 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
     form_class = ContactForm
     success_url = reverse_lazy('contact:contact_list')
 
-    def form_valid(self, form):  # автоматическое формирование автора
+    def form_valid(self, form):  # автоматическое присвоение автора
         if form.is_valid():
             product = form.save()
             product.created_by = self.request.user

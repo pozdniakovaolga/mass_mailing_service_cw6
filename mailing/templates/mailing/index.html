@@ -100,11 +100,12 @@
                             <a href="{% url 'mailing:log_list' %}"
                                class="btn btn-block btn-outline-primary">Посмотреть отчеты</a>
                             {% endif %}
+                        </div>
                         {% elif user.is_superuser %}
                             <a href="{% url 'mailing:log_list' %}"
                                class="btn btn-block btn-outline-primary">Посмотреть <br>отчеты</a>
 
-                        </div>
+
                         {% endif %}
                     </div>
             </div>
@@ -150,6 +151,5 @@
             </div>
         </div>
         {% endfor %}
-    </div>
 
-{% endblock %}
+{% endblock %}%
